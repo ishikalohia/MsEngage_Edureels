@@ -1,6 +1,22 @@
-# GuruAbleV1.7.0
+# Microsoft Engage 2021
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.0.
+The project is a resource sharing platform where users can share short Educational videos with each other. 
+
+It has following features - 
+There are 3 roles - Student, Teachers and Subject Experts.
+Users can create EduReels and can share them with each other.
+Teachers can add daily topics related to that day’s lecture. 
+Students will gain 10 points for uploading EduReels on daily Topics and 5 points for other topics.
+All the eduReels uploaded by students will be reviewed by Subject Experts before posting.
+The students who will have more than 500 points in any subject will be upgraded to Subject Expert.
+In the discussion section Teachers, Students and subject Experts can have meaningful conversations.
+Teachers and Subject Experts can delete the inappropriate comments from discussions.
+Any student with more than 10 deleted comments can't participate again in the discussions.
+There is a chat Facility to ensure 1:1 interactions.
+
+## Tech stack
+Angular 
+Firebase
 
 ## Development server
 
