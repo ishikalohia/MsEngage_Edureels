@@ -1,0 +1,231 @@
+<section class="p-fixed d-flex bg-primary common-img-bg">
+  <!-- starts -->
+  <div class="auth-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        <!-- Authentication card start -->
+        <div class="login-card card-body auth-body">
+          <form
+            class="md-float-material"
+            [formGroup]="profileForm"
+            (ngSubmit)="OnSubmit()"
+          >
+            <!-- <div class="text-center">
+              <img src="assets/images/auth/logo-dark.png" alt="Guru Able" />
+            </div> -->
+            <div class="auth-box">
+              <div class="row m-b-20">
+                <div class="col-md-12">
+                  <h3 class="text-center txt-primary">
+                    Fill Details. It is fast and easy.
+                  </h3>
+                </div>
+              </div>
+              <hr />
+              <div>
+                <div class="form-group">
+                  <!-- <label for="first-name"
+                    >First Name</label
+                  > -->
+                  <input
+                    id="first-name"
+                    type="text"
+                    formControlName="firstName"
+                    class="form-control"
+                    placeholder="First Name"
+                  />
+                </div>
+                <div class="form-group">
+                  <!-- <label for="last-name">Last Name</label> -->
+                  <input
+                    id="last-name"
+                    type="text"
+                    formControlName="lastName"
+                    class="form-control"
+                    placeholder="Last Name"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <!-- <label for="phone-number">Phone </label> -->
+                  <input
+                    id="phone-number"
+                    type="tel"
+                    formControlName="phoneNo"
+                    class="form-control"
+                    placeholder="Phone Number"
+                  />
+                </div>
+                <div class="form-group">
+                  <select
+                    formControlName="role"
+                    class="form-control"
+                    [(ngModel)]="selectedRole"
+                    (change)="showRole()"
+                  >
+                    <option
+                      [ngValue]="undefined"
+                      [disabled]="true"
+                      selected
+                      hidden
+                    >
+                      Choose your role
+                    </option>
+
+                    <option
+                      *ngFor="let r of role"
+                      [ngValue]="r"
+                      data-content=""
+                    >
+                      {{ r }}
+                    </option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <select
+                    formControlName="subject"
+                    class="form-control"
+                    [(ngModel)]="selectedSubject"
+                    (change)="showSubject()"
+                    *ngIf="selectedRole == 'Subject Expert'"
+                  >
+                    <option
+                      [ngValue]="undefined"
+                      [disabled]="true"
+                      selected
+                      hidden
+                    >
+                      Select the Subject
+                    </option>
+                    <option
+                      *ngFor="let subject of subjects"
+                      [ngValue]="subject"
+                      data-content=""
+                    >
+                      {{ subject }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <!-- <label  for="university"
+                    >University
+                  </label> -->
+                  <input
+                    id="university"
+                    type="text"
+                    formControlName="university"
+                    class="form-control"
+                    placeholder="University"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <!-- <label for="institute"
+                    >Institute
+                  </label> -->
+                  <input
+                    id="institute"
+                    type="text"
+                    formControlName="institute"
+                    class="form-control"
+                    placeholder="Institute"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="file" style="color: #7b7575">Profile Image</label>
+                  <input
+                    formControlName="file"
+                    id="file"
+                    type="file"
+                    class="form-control"
+                    accept="image/*"
+                    (change)="SaveImage($event)"
+                    placeholder="Select Profile Image"
+                  />
+                </div>
+              </div>
+              <div>
+                <!-- <div class="row m-t-25 text-left">
+                  <div class="col-md-12">
+                    <div class="checkbox-fade fade-in-primary">
+                      <label>
+                        <input type="checkbox" value="" />
+                        <span class="cr"
+                          ><i
+                            class="cr-icon icofont icofont-ui-check txt-primary"
+                          ></i
+                        ></span>
+                        <span class="text-inverse"
+                          >I read and accept
+                          <a href="javascript:;"
+                            >Terms &amp; Conditions.</a
+                          ></span
+                        >
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="checkbox-fade fade-in-primary">
+                      <label>
+                        <input type="checkbox" value="" />
+                        <span class="cr"
+                          ><i
+                            class="cr-icon icofont icofont-ui-check txt-primary"
+                          ></i
+                        ></span>
+                        <span class="text-inverse"
+                          >Send me the
+                          <a href="javascript:;">Newsletter</a> weekly.</span
+                        >
+                      </label>
+                    </div>
+                  </div> -->
+                <!-- </div> -->
+                <div class="row m-t-30">
+                  <div class="col-md-12">
+                    <button
+                      type="submit"
+                      class="
+                        btn btn-primary btn-md btn-block
+                        waves-effect
+                        text-center
+                        m-b-20
+                      "
+                      [disabled]="!profileForm.valid"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-md-10">
+                    <p class="text-inverse text-left m-b-0">
+                      Thank you for adding your details.
+                    </p>
+                    <p class="text-inverse text-left">
+                      <b>EduReels Team</b>
+                    </p>
+                  </div>
+                  <div class="col-md-2">
+                    <img
+                      src="assets/images/auth/Logo-small-bottom.png"
+                      alt="small-logo.png"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <!-- end of form -->
+        </div>
+        <!-- Authentication card end -->
+      </div>
+      <!-- end of col-sm-12 -->
+    </div>
+    <!-- end of row -->
+  </div>
+  <!-- end of -->
+</section>

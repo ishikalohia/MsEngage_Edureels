@@ -1,0 +1,406 @@
+<!--profile cover start-->
+<div class="row">
+  <div class="col-lg-12">
+    <div class="cover-profile">
+      <div class="profile-bg-img">
+        <img
+          class="profile-bg-img img-fluid"
+          src="assets/images/user-profile/bg-img1.jpg"
+          alt="bg-img"
+        />
+        <div class="card-body user-info">
+          <div class="col-md-12">
+            <div class="media-left">
+              <a href="javascript:;" class="profile-image">
+                <img
+                  class="user-img img-radius"
+                  src="{{ userprofile.Image }}"
+                  height="100px"
+                  width="100px"
+                  alt="user-img"
+                />
+              </a>
+            </div>
+            <div class="media-body row">
+              <div class="col-lg-12">
+                <div class="user-title">
+                  <h2>{{ userprofile.Name }}</h2>
+                  <span class="text-white">{{ userprofile.Role }}</span>
+                </div>
+              </div>
+              <!-- <div>
+                <div class="pull-right cover-btn">
+                  <button type="button" class="btn btn-primary m-b-10 m-r-10">
+                    <i class="icofont icofont-plus"></i> Follow
+                  </button>
+                  <button type="button" class="btn btn-primary m-b-10">
+                    <i class="icofont icofont-ui-messaging"></i> Message
+                  </button>
+                </div>
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--profile cover end-->
+<div class="row">
+  <div class="col-lg-12">
+    <div class="md-tabs">
+      <ngb-tabset>
+        <ngb-tab title="Personal Info">
+          <ng-template ngbTabContent>
+            <div [@fadeInOutTranslate] class="m-t-15">
+              <!-- personal card start -->
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-header-text">About Me</h5>
+                  <button
+                    id="edit-btn"
+                    type="button"
+                    class="
+                      btn btn-sm btn-primary
+                      waves-effect waves-light
+                      f-right
+                    "
+                    (click)="toggleEditProfile()"
+                    *ngIf="uid == userprofile.uid"
+                  >
+                    <i class="icofont {{ editProfileIcon }}"></i>
+                  </button>
+                </div>
+                <div class="card-body">
+                  <div class="view-info" *ngIf="editProfile">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="general-info">
+                          <div class="row">
+                            <div class="col-lg-12 col-xl-6">
+                              <div class="table-responsive">
+                                <table class="table m-0">
+                                  <tbody>
+                                    <tr>
+                                      <th scope="row">Full Name</th>
+                                      <td>{{ userprofile.Name }}</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">Role</th>
+                                      <td>{{ userprofile.Role }}</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">University</th>
+                                      <td>{{ userprofile.University }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                            <!-- end of table col-lg-6 -->
+                            <div class="col-lg-12 col-xl-6">
+                              <div class="table-responsive">
+                                <table class="table">
+                                  <tbody>
+                                    <tr>
+                                      <th scope="row">Institute</th>
+                                      <td>{{ userprofile.Institute }}</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">Email</th>
+                                      <td>
+                                        <a href="javascript:;">{{
+                                          userprofile.Email
+                                        }}</a>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">Mobile Number</th>
+                                      <td>{{ userprofile.Phone }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                            <!-- end of table col-lg-6 -->
+                          </div>
+                          <!-- end of row -->
+                        </div>
+                        <!-- end of general info -->
+                      </div>
+                      <!-- end of col-lg-12 -->
+                    </div>
+                    <!-- end of row -->
+                  </div>
+                  <!-- end of view-info -->
+
+                  <div class="edit-info" *ngIf="!editProfile">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <form [formGroup]="profileForm" (ngSubmit)="OnSubmit()">
+                          <div class="general-info">
+                            <div class="row">
+                              <div class="col-lg-6">
+                                <div class="table-responsive">
+                                  <table class="table">
+                                    <tbody>
+                                      <tr>
+                                        <td>
+                                          <div class="input-group">
+                                            <span class="input-group-prepend"
+                                              ><label class="input-group-text"
+                                                ><i
+                                                  class="icofont icofont-user"
+                                                ></i></label
+                                            ></span>
+                                            <input
+                                              type="text"
+                                              class="form-control"
+                                              placeholder="First Name"
+                                              formControlName="firstName"
+                                              value="{{
+                                                userprofile.FirstName
+                                              }}"
+                                            />
+                                            <input
+                                              type="text"
+                                              class="form-control"
+                                              placeholder="Last Name"
+                                              formControlName="lastName"
+                                              value="{{ userprofile.LastName }}"
+                                            />
+                                          </div>
+                                        </td>
+                                      </tr>
+
+                                      <tr>
+                                        <td>
+                                          <input
+                                            id="dropper-default"
+                                            class="form-control"
+                                            type="text"
+                                            formControlName="university"
+                                            value="{{ userprofile.University }}"
+                                            placeholder="University"
+                                          />
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                              <!-- end of table col-lg-6 -->
+                              <div class="col-lg-6">
+                                <div class="table-responsive">
+                                  <table class="table">
+                                    <tbody>
+                                      <tr>
+                                        <td>
+                                          <div class="input-group">
+                                            <span class="input-group-prepend"
+                                              ><label class="input-group-text"
+                                                ><i
+                                                  class="icofont icofont-earth"
+                                                ></i></label
+                                            ></span>
+                                            <input
+                                              type="text"
+                                              class="form-control"
+                                              value="{{
+                                                userprofile.Institute
+                                              }}"
+                                              formControlName="institute"
+                                              placeholder="Institute"
+                                            />
+                                          </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <div class="input-group">
+                                            <span class="input-group-prepend"
+                                              ><label class="input-group-text"
+                                                ><i
+                                                  class="
+                                                    icofont icofont-social-skype
+                                                  "
+                                                ></i></label
+                                            ></span>
+                                            <input
+                                              type="email"
+                                              class="form-control"
+                                              value="{{ userprofile.Email }}"
+                                              formControlName="email"
+                                              placeholder="Email"
+                                            />
+                                          </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td>
+                                          <div class="input-group">
+                                            <span class="input-group-prepend"
+                                              ><label class="input-group-text"
+                                                ><i
+                                                  class="
+                                                    icofont icofont-mobile-phone
+                                                  "
+                                                ></i></label
+                                            ></span>
+                                            <input
+                                              type="text"
+                                              class="form-control"
+                                              value="{{ userprofile.Phone }}"
+                                              formControlName="phoneNo"
+                                              placeholder="Mobile Number"
+                                            />
+                                          </div>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                              <!-- end of table col-lg-6 -->
+                            </div>
+                            <!-- end of row -->
+                            <div class="text-center">
+                              <button
+                                type="submit"
+                                class="
+                                  btn btn-primary
+                                  waves-effect waves-light
+                                  m-r-20
+                                "
+                              >
+                                Save
+                              </button>
+                              <a
+                                href="javascript:;"
+                                id="edit-cancel"
+                                class="btn btn-default waves-effect"
+                                (click)="toggleEditProfile()"
+                                >Cancel</a
+                              >
+                            </div>
+                          </div>
+                        </form>
+                        <!-- end of edit info -->
+                      </div>
+
+                      <!-- end of col-lg-12 -->
+                    </div>
+
+                    <!-- end of row -->
+                  </div>
+
+                  <!-- end of edit-info -->
+                </div>
+                <!-- end of card-body -->
+              </div>
+              <!-- personal card end-->
+            </div>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab title="EduReels">
+          <ng-template ngbTabContent>
+            <div [@fadeInOutTranslate] class="m-t-15">
+              <!-- info card start -->
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-header-text">Edureels</h5>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div
+                      class="col-sm-12 col-md-6 col-lg-4"
+                      *ngFor="let video of videos"
+                    >
+                      <div
+                        class="card b-l-success business-info services m-b-20"
+                      >
+                        <div
+                          ngbDropdown
+                          class="card-header"
+                          style="padding-bottom: 0px"
+                        >
+                          <div class="service-header">
+                            <a href="javascript:;"
+                              ><h5 class="card-header-text">
+                                {{ video.caption }}
+                              </h5></a
+                            >
+                          </div>
+                          <div>
+                            <button
+                              type="button"
+                              class="btn btn-sm btn-primary"
+                              style="margin-top: 7px; padding: 3px"
+                              disabled
+                            >
+                              {{ video.category.name }}
+                            </button>
+                          </div>
+                          <!-- <span
+                            ngbDropdownToggle
+                            class="
+                              dropdown-toggle
+                              addon-btn
+                              text-muted
+                              f-right
+                              service-btn
+                            "
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="true"
+                            role="tooltip"
+                          >
+                          </span> -->
+                          <div
+                            ngbDropdownMenu
+                            class="
+                              dropdown-menu dropdown-menu-right
+                              b-none
+                              services-list
+                            "
+                          >
+                            <a class="dropdown-item" href="javascript:;"
+                              ><i class="icofont icofont-edit"></i> Edit</a
+                            >
+                            <a class="dropdown-item" href="javascript:;"
+                              ><i class="icofont icofont-ui-delete"></i>
+                              Delete</a
+                            >
+                            <a class="dropdown-item" href="javascript:;"
+                              ><i class="icofont icofont-eye-alt"></i> View</a
+                            >
+                          </div>
+                        </div>
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <video width="100%" height="200px" controls>
+                                <source
+                                  src="{{ video.videoUrl }}"
+                                  type="video/mp4"
+                                />
+                              </video>
+                            </div>
+                            <!-- end of col-sm-8 -->
+                          </div>
+                          <!-- end of row -->
+                        </div>
+                        <!-- end of card-body -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- info card end -->
+            </div>
+          </ng-template>
+        </ngb-tab>
+      </ngb-tabset>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,649 @@
+<div
+  class="pcoded"
+  [attr.nav-type]="navType"
+  [attr.theme-layout]="themeLayout"
+  [attr.layout-type]="layoutType"
+  [attr.vertical-placement]="verticalPlacement"
+  [attr.vertical-layout]="verticalLayout"
+  [attr.pcoded-device-type]="deviceType"
+  [attr.vertical-nav-type]="verticalNavType"
+  [attr.vertical-effect]="verticalEffect"
+  [attr.vnavigation-view]="vNavigationView"
+  (window:resize)="onResize($event)"
+>
+  <div class="pcoded-overlay-box"></div>
+  <div class="pcoded-container navbar-wrapper">
+    <nav
+      class="navbar header-navbar pcoded-header"
+      [attr.pcoded-header-position]="pcodedHeaderPosition"
+      [attr.header-theme]="headerTheme"
+    >
+      <div class="navbar-wrapper">
+        <div class="navbar-logo" [attr.logo-theme]="logoTheme">
+          <a
+            class="mobile-menu"
+            id="mobile-collapse"
+            href="javascript:;"
+            (click)="toggleOpened()"
+            [exclude]="'#main_navbar'"
+            (clickOutside)="onClickedOutside($event)"
+          >
+            <i class="ti-menu"></i>
+          </a>
+          <a [routerLink]="['/']">
+            <img
+              class="img-fluid"
+              src="assets/images/logo.png"
+              alt="Theme-Logo"
+            />
+          </a>
+          <a (click)="onMobileMenu()" class="mobile-options">
+            <i class="ti-more"></i>
+          </a>
+        </div>
+
+        <div class="navbar-container">
+          <div>
+            <ul class="nav-left">
+              <li>
+                <div class="sidebar_toggle">
+                  <a href="javascript:;" (click)="toggleOpened()"
+                    ><i class="ti-menu f-18"></i
+                  ></a>
+                </div>
+              </li>
+              <li>
+                <a href="javascript:;" appToggleFullScreen>
+                  <i class="ti-fullscreen"></i>
+                </a>
+              </li>
+            </ul>
+            <ul
+              [@mobileMenuTop]="isCollapsedMobile"
+              class="nav-right"
+              [ngClass]="isCollapsedMobile"
+            >
+              <li class="header-notification">
+                <a href="javascript:;">
+                  <i class="ti-help-alt"></i>
+                  <span class="badge bg-c-pink"></span>
+                </a>
+                <ul class="show-notification">
+                  <li>
+                    <h6>Guidelines</h6>
+                    <label class="label label-danger">New</label>
+                  </li>
+                  <li>
+                    <p class="notification-msg">
+                      Users can create EduReels and can share them with each
+                      other.
+                    </p>
+                  </li>
+                  <li>
+                    <p class="notification-msg">
+                      Students will gain 10 points for uploading EduReels on
+                      daily Topics and 5 points for other topics.
+                    </p>
+                  </li>
+                  <li>
+                    <p class="notification-msg">
+                      All the eduReels uploaded by students will be reviewed by
+                      Subject Experts before posting.
+                    </p>
+                  </li>
+                  <li>
+                    <p class="notification-msg">
+                      The students who will have more than 500 points in any
+                      subject will be upgraded to Subject Expert.
+                    </p>
+                  </li>
+                  <li>
+                    <p class="notification-msg">
+                      In the discussion section Teachers, Students and subject
+                      Experts can have meaningful conversations.
+                    </p>
+                  </li>
+                  <li>
+                    <p class="notification-msg">
+                      Teachers and Subject Experts can delete the inappropriate
+                      comments from discussions.
+                    </p>
+                  </li>
+                  <li>
+                    <p class="notification-msg">
+                      Any student with more than 10 deleted comments can't
+                      participate again in the discussions.
+                    </p>
+                  </li>
+                  <li>
+                    <p class="notification-msg">
+                      There is a chat Facility to ensure 1:1 interactions.
+                    </p>
+                  </li>
+                </ul>
+              </li>
+              <li class="header-notification">
+                <a
+                  href="javascript:;"
+                  (click)="toggleChat()"
+                  class="displayChatbox"
+                >
+                  <i class="ti-comments"></i>
+                  <span class="badge bg-c-green"></span>
+                </a>
+              </li>
+              <li class="user-profile header-notification">
+                <a [routerLink]="['/']">
+                  <img
+                    src="{{ userprofile.Image }}"
+                    class="img-radius"
+                    alt="User-Profile-Image"
+                    width="40px"
+                    height="40px"
+                  />
+                  <span>{{ userprofile.Name }}</span>
+                  <i class="ti-angle-down"></i>
+                </a>
+                <ul class="show-notification profile-notification">
+                  <li>
+                    <a [routerLink]="['/user']">
+                      <i class="ti-user"></i> Profile
+                    </a>
+                  </li>
+                  <li>
+                    <a (click)="toggleChat()">
+                      <i class="ti-email"></i> My Messages
+                    </a>
+                  </li>
+
+                  <li>
+                    <a (click)="logout()">
+                      <i class="ti-layout-sidebar-left"></i> Logout
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- rightbar chat start -->
+    <div
+      [@slideInOut]="
+        verticalPlacement === 'right' ? chatToggleInverse : chatToggle
+      "
+      id="sidebar"
+      class="users p-chat-user"
+    >
+      <div class="had-container">
+        <div class="card card_main p-fixed users-main">
+          <div class="user-box">
+            <div class="card-body">
+              <form [formGroup]="chatForm">
+                <select
+                  (change)="createChat()"
+                  formControlName="users"
+                  [(ngModel)]="selectedUser"
+                  class="form-control"
+                >
+                  <option selected hidden value="">Start Chat</option>
+                  <option *ngFor="let user of users" [ngValue]="user">
+                    {{ user.firstName }} {{ user.lastName }} - {{ user.role }}
+                  </option>
+                </select>
+              </form>
+              <!-- <ng-select
+                [ngClass]=""
+                [options]="userList"
+                [(ngModel)]="selectedUser"
+                (ngModelChange)="createChat()"
+                [allowClear]="true"
+                placeholder="Search"
+              >
+              </ng-select> -->
+            </div>
+            <div class="main-friend-list scroll-window">
+              <perfect-scrollbar [style.max-width]="'100%'" [config]="config">
+                <div
+                  class="media userlist-box"
+                  data-id="1"
+                  placement="left"
+                  *ngFor="let chat of chatList"
+                  (click)="toggleChatInner(chat)"
+                >
+                  <a class="media-left" href="javascript:;">
+                    <img
+                      class="media-object"
+                      src="{{ chat.file }}"
+                      alt="Generic placeholder image"
+                    />
+                    <!-- <div class="live-status bg-success"></div> -->
+                  </a>
+                  <div class="media-body">
+                    <div class="f-13 chat-header">
+                      {{ chat.firstName }} {{ chat.lastName }}
+                      <p style="font-size: 12px; color: #808080c9">
+                        {{ chat.role }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </perfect-scrollbar>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      [@slideOnOff]="
+        verticalPlacement === 'right' ? chatInnerToggleInverse : chatInnerToggle
+      "
+      class="card card_main showChat_inner"
+      *ngIf="currentMessage != 'undefined'"
+    >
+      <div class="media chat-inner-header">
+        <a class="back_chatBox" (click)="toggleChatInner(currentMessage)">
+          <i class="icofont icofont-rounded-left"></i>
+          {{ currentMessage.firstName }} {{ currentMessage.lastName }}
+        </a>
+      </div>
+      <perfect-scrollbar
+        [style.max-width]="'100%'"
+        [style.max-height]="'calc(100vh - 230px)'"
+        [config]="config"
+      >
+        <div *ngFor="let message of chatMessages">
+          <div
+            class="media chat-messages"
+            *ngIf="message.currentUser === false"
+          >
+            <a class="media-left photo-table" href="javascript:;">
+              <img
+                class="media-object m-t-5"
+                src="{{ currentMessage.file }}"
+                alt="Generic placeholder image"
+              />
+            </a>
+            <div class="media-body chat-menu-content">
+              <div class="">
+                <p class="chat-cont">
+                  {{ message.message }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="media chat-messages" *ngIf="message.currentUser === true">
+            <div class="media-body chat-menu-reply">
+              <div class="">
+                <p class="chat-cont">
+                  {{ message.message }}
+                </p>
+              </div>
+            </div>
+            <div class="media-right photo-table">
+              <a href="javascript:;">
+                <img
+                  class="media-object m-t-5"
+                  src="{{ currentUser.file }}"
+                  alt="Generic placeholder image"
+                />
+              </a>
+            </div>
+          </div>
+        </div>
+      </perfect-scrollbar>
+      <div class="chat-reply-box p-b-20">
+        <div class="right-icon-control">
+          <!-- <form [formGroup]="messageForm">
+            <div class="form-group">
+              <div class="row">
+                <div class="col-sm-12 col-md-10">
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="message"
+                    placeholder="Add Message"
+                  />
+                </div>
+                <div class="col-sm-12 col-md-2">
+                  <button
+                    class="btn btn-success btn-sm btn-block float-right"
+                    type="submit"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form> -->
+          <form
+            [formGroup]="messageForm"
+            (submit)="addChatMessage(messageForm.value)"
+          >
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control search-text"
+                formControlName="message"
+                placeholder="Share Your Thoughts"
+              />
+              <div class="form-icon">
+                <i class="icofont icofont-paper-plane" type="submit"></i>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- right-bar inner chat end -->
+
+    <div class="pcoded-main-container" [style.margin-top]="headerFixedMargin">
+      <div class="pcoded-wrapper">
+        <nav
+          id="main_navbar"
+          class="pcoded-navbar"
+          (clickOutside)="onClickedOutside($event)"
+          [exclude]="'#mobile-collapse'"
+          [attr.pcoded-header-position]="pcodedHeaderPosition"
+          [attr.navbar-theme]="navBarTheme"
+          [attr.active-item-theme]="activeItemTheme"
+          sub-item-theme="theme2"
+          active-item-style="style0"
+          [attr.pcoded-navbar-position]="pcodedSidebarPosition"
+        >
+          <div class="sidebar_toggle">
+            <a href="javascript:;"><i class="icon-close icons"></i></a>
+          </div>
+          <div class="pcoded-inner-navbar main-menu" appAccordion>
+            <div class="">
+              <div class="main-menu-header">
+                <img
+                  class="img-40 img-radius"
+                  src="{{ userprofile.Image }}"
+                  alt="User-Profile-Image"
+                />
+                <div class="user-details">
+                  <span>{{ userprofile.Name }}</span>
+                  <span id="more-details" (click)="toggleOpenedSidebar()"
+                    >{{ userprofile.Role }}<i class="ti-angle-down"></i
+                  ></span>
+                </div>
+              </div>
+              <div class="main-menu-content">
+                <ul>
+                  <li
+                    [@mobileMenuTop]="isCollapsedSideBar"
+                    class="more-details"
+                    [ngClass]="isCollapsedSideBar"
+                  >
+                    <a [routerLink]="['/user']"
+                      ><i class="ti-user"></i>View Profile</a
+                    >
+                    <!-- <a [routerLink]="['/crm-contact']"
+                      ><i class="ti-settings"></i>Settings</a
+                    > -->
+                    <a (click)="logout()"
+                      ><i class="ti-layout-sidebar-left"></i>Logout</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <perfect-scrollbar
+              [style.max-width]="'100%'"
+              [style.max-height]="'calc(100vh - 230px)'"
+              [config]="config"
+            >
+              <div
+                *ngFor="let asideItems of menuItems.getAll()"
+                class="d-color"
+              >
+                <div
+                  class="pcoded-navigatio-lavel"
+                  [attr.menu-title-theme]="menuTitleTheme"
+                >
+                  {{ asideItems.label }}
+                </div>
+                <ul
+                  class="pcoded-item pcoded-left-item"
+                  [attr.item-border]="itemBorder"
+                  [attr.item-border-style]="itemBorderStyle"
+                  [attr.subitem-border]="subItemBorder"
+                  *ngFor="let asideItem of asideItems.main"
+                  appAccordionLink
+                  group="{{ asideItem.state }}"
+                >
+                  <li
+                    [routerLinkActive]="['active']"
+                    *ngIf="asideItem.type === 'external'"
+                    appAccordionLink
+                    group="{{ asideItem.state }}"
+                  >
+                    <a
+                      href="{{ asideItem.external }}"
+                      target="{{ asideItem.target ? '_blank' : '_self' }}"
+                      appAccordionToggle
+                    >
+                      <span class="pcoded-micon"
+                        ><i class="{{ asideItem.icon }}"></i
+                        ><b>{{ asideItem.short_label }}</b></span
+                      >
+                      <span class="pcoded-mtext">{{ asideItem.name }}</span>
+                      <span
+                        *ngFor="let asideBadge of asideItem.badge"
+                        class="pcoded-badge label label-{{ asideBadge.type }}"
+                        >{{ asideBadge.value }}</span
+                      >
+                      <span class="pcoded-mcaret"></span>
+                    </a>
+                  </li>
+
+                  <li
+                    [routerLinkActive]="['active']"
+                    *ngIf="asideItem.type === 'link'"
+                    appAccordionLink
+                    group="{{ asideItem.state }}"
+                  >
+                    <a
+                      [routerLink]="[
+                        '/',
+                        asideItem.main_state,
+                        asideItem.state
+                      ]"
+                      target="{{ asideItem.target ? '_blank' : '_self' }}"
+                      appAccordionToggle
+                      *ngIf="asideItem.main_state; else mainContent"
+                    >
+                      <span class="pcoded-micon"
+                        ><i class="{{ asideItem.icon }}"></i
+                        ><b>{{ asideItem.short_label }}</b></span
+                      >
+                      <span class="pcoded-mtext">{{ asideItem.name }}</span>
+                      <span
+                        *ngFor="let asideBadge of asideItem.badge"
+                        class="pcoded-badge label label-{{ asideBadge.type }}"
+                        >{{ asideBadge.value }}</span
+                      >
+                      <span class="pcoded-mcaret"></span>
+                    </a>
+                    <ng-template #mainContent>
+                      <a
+                        [routerLink]="['/', asideItem.state]"
+                        target="{{ asideItem.target ? '_blank' : '_self' }}"
+                        appAccordionToggle
+                      >
+                        <span class="pcoded-micon"
+                          ><i class="{{ asideItem.icon }}"></i
+                          ><b>{{ asideItem.short_label }}</b></span
+                        >
+                        <span class="pcoded-mtext">{{ asideItem.name }}</span>
+                        <span
+                          *ngFor="let asideBadge of asideItem.badge"
+                          class="pcoded-badge label label-{{ asideBadge.type }}"
+                          >{{ asideBadge.value }}</span
+                        >
+                        <span class="pcoded-mcaret"></span>
+                      </a>
+                    </ng-template>
+                  </li>
+                  <li
+                    [routerLinkActive]="['active']"
+                    *ngIf="asideItem.type === 'sub'"
+                    class="pcoded-hasmenu"
+                    [attr.dropdown-icon]="dropDownIcon"
+                    [attr.subitem-icon]="subItemIcon"
+                    appAccordionLink
+                    group="{{ asideItem.state }}"
+                  >
+                    <a
+                      [routerLinkActive]="['active']"
+                      href="javascript:;"
+                      appAccordionToggle
+                    >
+                      <span class="pcoded-micon"
+                        ><i class="{{ asideItem.icon }}"></i
+                        ><b>{{ asideItem.short_label }}</b></span
+                      >
+                      <span class="pcoded-mtext">{{ asideItem.name }}</span>
+                      <span
+                        *ngFor="let asideBadge of asideItem.badge"
+                        class="pcoded-badge label label-{{ asideBadge.type }}"
+                        >{{ asideBadge.value }}</span
+                      >
+                      <span class="pcoded-mcaret"></span>
+                    </a>
+                    <ul class="pcoded-submenu">
+                      <ng-template
+                        ngFor
+                        let-asideChildren
+                        [ngForOf]="asideItem.children"
+                      >
+                        <li
+                          [routerLinkActive]="['active']"
+                          *ngIf="asideChildren.type !== 'sub'"
+                        >
+                          <a
+                            [routerLink]="[
+                              '/',
+                              asideItem.state,
+                              asideChildren.state
+                            ]"
+                            target="{{
+                              asideChildren.target ? '_blank' : '_self'
+                            }}"
+                          >
+                            <span class="pcoded-micon"
+                              ><i class="ti-angle-right"></i
+                            ></span>
+                            <span class="pcoded-mtext"
+                              >{{ asideChildren.name }}
+                            </span>
+                            <span
+                              *ngFor="
+                                let asideChildrenBadge of asideChildren.badge
+                              "
+                              class="pcoded-badge label label-{{
+                                asideChildrenBadge.type
+                              }}"
+                              >{{ asideChildrenBadge.value }}</span
+                            >
+                            <span class="pcoded-mcaret"></span>
+                          </a>
+                        </li>
+
+                        <li
+                          [routerLinkActive]="['active']"
+                          class="pcoded-hasmenu"
+                          [attr.dropdown-icon]="dropDownIcon"
+                          [attr.subitem-icon]="subItemIcon"
+                          *ngIf="asideChildren.type === 'sub'"
+                          appAccordionLink
+                          group="sub-toggled"
+                        >
+                          <a href="javascript:;" appAccordionToggle>
+                            <span class="pcoded-micon"
+                              ><i class="ti-direction-alt"></i
+                            ></span>
+                            <span class="pcoded-mtext">{{
+                              asideChildren.name
+                            }}</span>
+                            <span
+                              *ngFor="
+                                let asideChildrenBadge of asideChildren.badge
+                              "
+                              class="pcoded-badge label label-{{
+                                asideChildrenBadge.type
+                              }}"
+                              >{{ asideChildrenBadge.value }}</span
+                            >
+                            <span class="pcoded-mcaret"></span>
+                          </a>
+                          <ul class="pcoded-submenu">
+                            <ng-template
+                              ngFor
+                              let-asideChildrenSub
+                              [ngForOf]="asideChildren.children"
+                            >
+                              <li [routerLinkActive]="['active']">
+                                <a
+                                  [routerLink]="[
+                                    '/',
+                                    asideItem.state,
+                                    asideChildren.state,
+                                    asideChildrenSub.state
+                                  ]"
+                                  target="{{
+                                    asideChildrenSub.target ? '_blank' : '_self'
+                                  }}"
+                                >
+                                  <span class="pcoded-micon"
+                                    ><i class="ti-angle-right"></i
+                                  ></span>
+                                  <span class="pcoded-mtext">{{
+                                    asideChildrenSub.name
+                                  }}</span>
+                                  <span
+                                    *ngFor="
+                                      let asideChildrenSubBadge of asideChildrenSub.badge
+                                    "
+                                    class="pcoded-badge label label-{{
+                                      asideChildrenSubBadge.type
+                                    }}"
+                                    >{{ asideChildrenSubBadge.value }}</span
+                                  >
+                                  <span class="pcoded-mcaret"></span>
+                                </a>
+                              </li>
+                            </ng-template>
+                          </ul>
+                        </li>
+                      </ng-template>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </perfect-scrollbar>
+          </div>
+        </nav>
+        <div class="pcoded-content">
+          <div class="pcoded-inner-content">
+            <div class="main-body">
+              <div class="page-wrapper">
+                <app-title></app-title>
+                <app-breadcrumbs></app-breadcrumbs>
+                <div class="page-body">
+                  <router-outlet>
+                    <app-spinner></app-spinner>
+                  </router-outlet>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

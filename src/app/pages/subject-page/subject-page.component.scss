@@ -1,0 +1,70 @@
+.Head {
+  padding: 30px;
+  background: white;
+  border-radius: 8px;
+  box-sizing: border-box;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+img {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  height: 60px;
+  width: 60px;
+  margin-right: 10px;
+  border: 1px solid white;
+}
+
+.heading {
+  font-size: 16px;
+  font-weight: 600;
+  margin-left: 10px;
+}
+
+.icon {
+  margin-top: 15px;
+  font-size: 20px;
+}
+
+.userImage {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.tag-icon {
+  height: 30px;
+  width: 30px;
+  margin-right: 10px;
+}
+
+.video-card {
+  width: 350px;
+  padding: 0px;
+  box-shadow: none;
+}
+
+.card-video {
+  width: 100%;
+  height: 200px;
+  margin-right: 20px;
+  min-width: 135px;
+  background: #000000b0;
+}
+
+.video-user {
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  margin-right: 10px;
+  margin-left: 5px;
+  vertical-align: inherit;
+}
+
+.user-tag {
+  border-radius: 50%;
+  margin-right: 20px;
+  margin-left: 10%;
+  height: 30px;
+  width: 30px;
+}

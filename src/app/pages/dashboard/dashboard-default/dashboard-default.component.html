@@ -1,0 +1,544 @@
+<div class="row" *ngIf="eligibleSE == true && role == 'Student'">
+  <div class="col-12">
+    <div class="congrats-block">
+      <img src="../../../../assets/images/congrats.JPG" height="70px" />
+      <p class="congrats d-inline-block">
+        <b>Congratulations!</b> You are eligible to be a Subject Expert for
+        <strong>{{ eligibleSubject }}</strong
+        >.
+      </p>
+      <button
+        class="btn btn-outline-primary float-right congrats-btn"
+        (click)="changeRoleToSubjectExpert()"
+      >
+        Accept
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6 col-xl-6">
+    <div class="card widget-statstic-card">
+      <div class="card-header">
+        <div class="card-header-left">
+          <h5>Explore Student Creater</h5>
+          <p class="p-t-10 m-b-0 text-c-blue">
+            Explore the profile of fellow student creaters
+          </p>
+        </div>
+      </div>
+      <div class="card-block">
+        <i
+          class="icofont icofont-users-social st-icon bg-c-blue txt-lite-color"
+        ></i>
+
+        <div
+          [ngClass]="role == 'Teacher' ? 'large-vertical' : 'small-vertical'"
+        >
+          <div *ngFor="let user of users">
+            <div
+              class="browser-card b-t-default p-t-15 p-b-15"
+              *ngIf="user.role == 'Student'"
+            >
+              <img
+                src="{{ user.file }}"
+                placement="top"
+                ngbTooltip="{{ user.firstName }}"
+                class="float-left userImage"
+              />
+              <p class="d-inline-block m-0">
+                {{ user.firstName }} {{ user.lastName }}
+              </p>
+              <a
+                class="label bg-c-blue m-l-10 f-10 float-right"
+                (click)="openProfile(user)"
+              >
+                Profile
+              </a>
+              <p class="points float-right" *ngIf="user.numPost">
+                {{ user.numPost }} Posts
+              </p>
+              <p
+                class="points float-right"
+                *ngIf="user.postPoints != 'undefined'"
+              >
+                {{ user.postPoints }} Points
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-xl-6">
+    <div class="card widget-statstic-card">
+      <div class="card-header">
+        <div class="card-header-left">
+          <h5>Topics for Today</h5>
+          <p class="p-t-10 m-b-0 text-c-green">
+            Add Edureel on these Topics for 10 Points
+          </p>
+        </div>
+      </div>
+      <div class="card-block">
+        <i class="icofont icofont-chart-line st-icon bg-c-green"></i>
+
+        <div class="vertical">
+          <div
+            class="browser-card b-t-default p-t-15 p-b-15"
+            *ngFor="let tag of tags"
+          >
+            <img
+              src="../../../../assets/images/Icon.png"
+              class="float-left tag-icon"
+            />
+            <p class="d-inline-block m-0">
+              {{ tag.name }}
+            </p>
+
+            <img
+              src="{{ tag.file }}"
+              placement="top"
+              ngbTooltip="{{ tag.firstName }}"
+              class="float-right user-tag"
+            />
+          </div>
+        </div>
+        <div class="browser-card b-t-default p-t-15" *ngIf="role == 'Teacher'">
+          <form [formGroup]="tagTemplate" (submit)="onAdd(tagTemplate.value)">
+            <div class="form-group">
+              <div class="row">
+                <div class="col-sm-12 col-md-10">
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="name"
+                    placeholder="Add Topic"
+                  />
+                </div>
+                <div class="col-sm-12 col-md-2">
+                  <button
+                    class="btn btn-success btn-sm btn-block float-right"
+                    type="submit"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row md-tabs">
+  <div class="col-12">
+    <ngb-tabset>
+      <ngb-tab title="EduReels">
+        <ng-template ngbTabContent>
+          <div class="row">
+            <h5 class="section-head">Explore Topics</h5>
+            <div class="col-sm-4 col-lg-2" *ngFor="let subject of subjects">
+              <div
+                class="card bg-dark text-white"
+                style="height: 80%"
+                (click)="openSubjectVideos(subject)"
+              >
+                <img src="{{ subject.url }}" class="card-img" height="100%" />
+                <div class="card-img-overlay">
+                  <h5
+                    class="card-title"
+                    style="color: rgb(250, 249, 249); font-weight: 700"
+                  >
+                    {{ subject.name }}
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <h5 class="section-head">Explore Teachers</h5>
+              <div class="d-flex flex-row flex-nowrap overflow-auto">
+                <div *ngFor="let user of users">
+                  <div
+                    class="card profile-card-1"
+                    *ngIf="user.role == 'Teacher'"
+                  >
+                    <img
+                      src="{{ user.file }}"
+                      alt="profile-image"
+                      class="profile"
+                    />
+                    <div class="card-content">
+                      <div class="d-inline-block">
+                        <h5>{{ user.firstName }} {{ user.lastName }}</h5>
+                        <br />
+                        <button
+                          class="btn btn-primary btn-block btn-sm float-bottom"
+                          (click)="openProfile(user)"
+                        >
+                          Profile
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngFor="let videoInfo of videoArray">
+            <div *ngIf="videoInfo != undefined && videoInfo.videos.length > 0">
+              <h5 class="section-head">{{ videoInfo.Heading }}</h5>
+              <div class="d-flex flex-row flex-nowrap overflow-auto">
+                <div *ngFor="let video of videoInfo.videos">
+                  <div class="card card-block mx-2 video-card">
+                    <div class="card-header" style="padding: 10px">
+                      <img
+                        src="{{ video.file }}"
+                        class="video-user"
+                        placement="top"
+                      />
+                      <div class="d-inline-block">
+                        <h5>{{ video.firstName }} {{ video.lastName }}</h5>
+                        <span>{{ video.role }}</span>
+                      </div>
+                    </div>
+                    <video class="card-video" controls>
+                      <source src="{{ video.videoUrl }}" type="video/mp4" />
+                    </video>
+                    <div class="card-body">
+                      <div class="card-title">{{ video.caption }}</div>
+                      <div class="btn btn-primary btn-sm" disabled>
+                        {{ video.category.name }}
+                      </div>
+                      <!-- <i
+                        *ngIf="video.status != 'Review'"
+                        class="fa fa-thumbs-up float-right"
+                      ></i> -->
+                      <i
+                        class="fa fa-check-circle float-right tick"
+                        (click)="changeVideoStatus(video, 'Pass')"
+                        *ngIf="video.status == 'Review'"
+                      ></i>
+                      <i
+                        class="fa fa-times-circle float-right cross"
+                        (click)="changeVideoStatus(video, 'Fail')"
+                        *ngIf="video.status == 'Review'"
+                      ></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <h5 class="section-head">Explore Subject Experts</h5>
+              <div class="d-flex flex-row flex-nowrap overflow-auto">
+                <div *ngFor="let user of users">
+                  <div
+                    class="card profile-card-1"
+                    *ngIf="user.role == 'Subject Expert'"
+                  >
+                    <img
+                      src="{{ user.file }}"
+                      alt="profile-image"
+                      class="profile"
+                    />
+                    <div class="card-content">
+                      <div class="d-inline-block">
+                        <h5>{{ user.firstName }} {{ user.lastName }}</h5>
+                        <span>{{ user.subject }}</span>
+                        <button
+                          class="btn btn-primary btn-block btn-sm float-bottom"
+                          (click)="openProfile(user)"
+                        >
+                          Profile
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <h5 class="section-head">Upload EduReels</h5>
+              <app-card>
+                <form
+                  [formGroup]="formTemplate"
+                  (submit)="onSubmit(formTemplate.value)"
+                >
+                  <div class="form-group">
+                    <!-- <label>Add EduReel <span class="required">*</span></label> -->
+                    <input
+                      type="file"
+                      accept="video/*"
+                      class="form-control"
+                      #fileUploader
+                      formControlName="videoUrl"
+                      (change)="saveVideo($event)"
+                    />
+                    <div
+                      class="text-danger"
+                      *ngIf="
+                        isSubmitted && formControls.videoUrl.errors?.required
+                      "
+                    >
+                      This field is required.
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <!-- <label>Add Title <span class="required">*</span></label> -->
+                    <input
+                      class="form-control"
+                      formControlName="caption"
+                      placeholder="Title"
+                    />
+                    <div
+                      class="text-danger"
+                      *ngIf="
+                        isSubmitted && formControls.caption.errors?.required
+                      "
+                    >
+                      This field is required.
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <!-- <label width="20%"
+                      >Add Tag <span class="required">*</span></label
+                    > -->
+                    <select formControlName="category" class="form-control">
+                      <option selected hidden value="">Select Tag</option>
+                      <option
+                        *ngFor="let tag of tagOption"
+                        [ngValue]="tag"
+                        data-content=""
+                      >
+                        {{ tag.name }}
+                      </option>
+                    </select>
+                    <div
+                      class="text-danger"
+                      *ngIf="
+                        isSubmitted && formControls.category.errors?.required
+                      "
+                    >
+                      This field is required.
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <!-- <label>Add Subject <span class="required">*</span></label> -->
+                    <select formControlName="subject" class="form-control">
+                      <option selected hidden value="">
+                        Select the Subject
+                      </option>
+                      <option
+                        *ngFor="let subject of subjects"
+                        [ngValue]="subject.name"
+                        data-content=""
+                      >
+                        {{ subject.name }}
+                      </option>
+                    </select>
+                    <div
+                      class="text-danger"
+                      *ngIf="
+                        isSubmitted && formControls.subject.errors?.required
+                      "
+                    >
+                      This field is required.
+                    </div>
+                  </div>
+                  <div
+                    class="d-flex justify-content-center"
+                    *ngIf="uploading == true"
+                  >
+                    <div class="spinner-border" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-12">
+                      <button
+                        type="submit"
+                        class="btn btn-primary btn-block float-right"
+                      >
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </app-card>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+
+      <ngb-tab title="Discussions">
+        <ng-template ngbTabContent>
+          <div class="row" *ngIf="discussionList == true">
+            <form
+              [formGroup]="discussionTemplate"
+              style="margin-top: 10px"
+              (submit)="addDiscussion(discussionTemplate.value)"
+              class="col-12"
+            >
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-sm-12 col-md-8">
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="title"
+                      placeholder="Add Topic"
+                      width="100%"
+                    />
+                  </div>
+                  <div class="col-sm-12 col-md-2">
+                    <select formControlName="subject" class="form-control">
+                      <option selected hidden value="">
+                        Select the Subject
+                      </option>
+                      <option
+                        *ngFor="let subject of subjects"
+                        [ngValue]="subject.name"
+                        data-content=""
+                      >
+                        {{ subject.name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col-sm-12 col-md-2">
+                    <button
+                      class="btn btn-primary btn-sm btn-block float-right"
+                      type="submit"
+                    >
+                      Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <div
+              class="Head col-12"
+              *ngFor="let discussion of discussions"
+              (click)="openDiscussion(discussion)"
+            >
+              <img
+                src="{{ discussion.file }}"
+                placement="top"
+                ngbTooltip="{{ discussion.firstName }}"
+                class="float-left userImage"
+              />
+              {{ discussion.Topic }}
+              <button class="btn btn-outline-primary btn-sm float-right">
+                {{ discussion.subject }}
+              </button>
+            </div>
+          </div>
+          <div class="row" *ngIf="discussionMessage == true">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-header-text">
+                    {{ currentDiscussion.Topic }}
+                  </h5>
+                  <span class="float-right close" (click)="openList()">X</span>
+                </div>
+                <div class="card-body">
+                  <ul class="media-list">
+                    <li class="media" *ngFor="let message of messages">
+                      <div class="media-left">
+                        <a href="javascript:;">
+                          <img
+                            class="media-object img-radius comment-img"
+                            src="{{ message.file }}"
+                            alt="Generic placeholder image"
+                          />
+                        </a>
+                      </div>
+                      <div class="media-body">
+                        <h6 class="media-heading">
+                          {{ message.firstName }} {{ message.lastName
+                          }}<span class="f-12 text-muted m-l-5">{{
+                            message.role
+                          }}</span>
+                          <i
+                            class="fa fa-trash float-right delete"
+                            *ngIf="
+                              (role != 'Student' &&
+                                message.role == 'Student') ||
+                              message.uid == currentUser.uid
+                            "
+                            (click)="deleteMessage(message)"
+                          ></i>
+                        </h6>
+
+                        <p class="m-b-0">
+                          {{ message.content }}
+                        </p>
+                        <hr />
+                      </div>
+                    </li>
+                  </ul>
+                  <form
+                    [formGroup]="messageTemplate"
+                    style="margin-top: 10px"
+                    (submit)="addMessage(messageTemplate.value)"
+                    class="col-12"
+                    *ngIf="
+                      currentUser.deletedDiscussion == undefined ||
+                      currentUser.deletedDiscussion <= 10
+                    "
+                  >
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-sm-12 col-md-10">
+                          <textarea
+                            class="form-control"
+                            formControlName="message"
+                            placeholder="Add..."
+                            width="100%"
+                          >
+                          </textarea>
+                        </div>
+                        <div class="col-sm-12 col-md-2">
+                          <button
+                            class="btn btn-primary btn-sm btn-block float-right"
+                            type="submit"
+                          >
+                            Add
+                          </button>
+                        </div>
+                      </div>
+                      <p *ngIf="currentUser.deletedDiscussion != undefined">
+                        You have {{ currentUser.deletedDiscussion }} deleted
+                        comment.
+                      </p>
+                    </div>
+                  </form>
+                  <p
+                    *ngIf="
+                      currentUser.deletedDiscussion != undefined &&
+                      currentUser.deletedDiscussion > 10
+                    "
+                  >
+                    Sorry! You can't participate in the discussion as you have
+                    more than 10 comments which break the guidelines.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+  </div>
+</div>
